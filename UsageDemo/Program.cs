@@ -7,6 +7,10 @@ namespace UsageDemo
 {
     class Program
     {
+        static string myInstance = "instanceName";
+        static string instanceUserName = "user";
+        static string instancePassword = "pass";
+
         static void Main(string[] args)
         {
             // Shows basic CRUD operations with a simple small subset of a record
@@ -21,7 +25,7 @@ namespace UsageDemo
 
         static void basicOperations()
         {
-            TableAPIClient<sys_user> client = new TableAPIClient<sys_user>("sys_user", "yourInstance", "user", "pass");
+            TableAPIClient<sys_user> client = new TableAPIClient<sys_user>("sys_user", myInstance, instanceUserName, instancePassword);
 
             // Create a user
             var createdUser = client.Post(new sys_user()
@@ -61,12 +65,12 @@ namespace UsageDemo
         static void retrieveByQuery()
         {
             var query = "active=true^u_resolved=false";
-            TableAPIClient<incident> client = new TableAPIClient<incident>("incident", "yourInstance", "user", "pass");
+            TableAPIClient<incident> client = new TableAPIClient<incident>("incident", myInstance, instanceUserName, instancePassword);
 
             foreach (incident r in client.GetByQuery(query).result)
             {
                 DateTime openedOn = DateTime.Parse(r.opened_at);
-                ResourceLink openedBy = r.opened_by;
+                ResourceLink openedFor = r.caller_id;
 
                 Console.WriteLine(r.number + " :  " + r.short_description + " (Opened " + openedOn.ToShortDateString() + " for " + r.caller_first_name + ")");
             }

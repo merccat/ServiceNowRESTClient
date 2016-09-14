@@ -2,6 +2,7 @@
 using System.Web;
 using System.Net;
 using System.IO;
+using System.Linq;
 using Newtonsoft.Json;
 using System.Reflection;
 
@@ -41,8 +42,17 @@ namespace ServiceNow.TableAPI
             Type i = typeof(T);
             foreach (var prop in i.GetProperties())
             {
-                if (_FieldList.Length > 0) { _FieldList += ","; }
-                _FieldList += prop.Name;
+                var field = prop.CustomAttributes.FirstOrDefault(x => x.AttributeType.Name == "JsonPropertyAttribute");
+                if (field != null)
+                {
+                    var fieldName = field.ConstructorArguments.FirstOrDefault(x => x.ArgumentType.Name == "String");
+                    if (fieldName != null) {
+                        if (_FieldList.Length > 0) { _FieldList += ","; }
+                        _FieldList += fieldName.Value; 
+                    }
+                }
+                //if (_FieldList.Length > 0) { _FieldList += ","; }
+                //_FieldList += prop.Name;               
             }
         }
 
@@ -67,8 +77,18 @@ namespace ServiceNow.TableAPI
             Type i = typeof(T);
             foreach (var prop in i.GetProperties())
             {
-                if (_FieldList.Length > 0) { _FieldList += ","; }
-                _FieldList += prop.Name;
+                var field = prop.CustomAttributes.FirstOrDefault(x => x.AttributeType.Name == "JsonPropertyAttribute");
+                if (field != null)
+                {
+                    var fieldName = field.ConstructorArguments.FirstOrDefault(x => x.ArgumentType.Name == "String");
+                    if (fieldName != null)
+                    {
+                        if (_FieldList.Length > 0) { _FieldList += ","; }
+                        _FieldList += fieldName.Value;
+                    }
+                }
+                //if (_FieldList.Length > 0) { _FieldList += ","; }
+                //_FieldList += prop.Name;
             }
         }
 
@@ -82,16 +102,19 @@ namespace ServiceNow.TableAPI
 
         private string ParseWebException(WebException ex)
         {
-            string message = "";
+            string message = ex.Message + "\n\n";
 
-            var resp = new StreamReader(ex.Response.GetResponseStream()).ReadToEnd();
-            dynamic obj = JsonConvert.DeserializeObject(resp);
+            if (ex.Response != null)
+            {
+                var resp = new StreamReader(ex.Response.GetResponseStream()).ReadToEnd();
+                dynamic obj = JsonConvert.DeserializeObject(resp);
 
-            message = "status: " + obj.status + "\n";
-            message += ex.Message + "\n\n";
-            message += "message: " + obj.error.message + "\n";
-            message += "detail: " + obj.error.detail + "\n";
-
+                message = "status: " + obj.status + "\n";
+                message += ex.Message + "\n\n";
+                message += "message: " + obj.error.message + "\n";
+                message += "detail: " + obj.error.detail + "\n";
+            }
+            
             return message;
         }
 

@@ -30,29 +30,7 @@ namespace ServiceNow.TableAPI
         /// <param name="credentials">Credentials for the user who will be used to access the table through the REST API.</param>
         public TableAPIClient(String tableName, String instanceName, NetworkCredential credentials)
         {
-            _TableName = tableName;
-            _InstanceName = instanceName;
-
-            // Initialize the Web Client
-            ServiceNowClient = new WebClient();
-            ServiceNowClient.Credentials = credentials;
-
-            // Build the field list from the record type that will be retrieved
-            _FieldList = "";
-            Type i = typeof(T);
-            foreach (var prop in i.GetProperties())
-            {
-                // We need to build the field list using the JsonProperty attributes since those strings can contain our dot notation.
-                var field = prop.CustomAttributes.FirstOrDefault(x => x.AttributeType.Name == "JsonPropertyAttribute");
-                if (field != null)
-                {
-                    var fieldName = field.ConstructorArguments.FirstOrDefault(x => x.ArgumentType.Name == "String");
-                    if (fieldName != null) {
-                        if (_FieldList.Length > 0) { _FieldList += ","; }
-                        _FieldList += fieldName.Value; 
-                    }
-                }           
-            }
+            initialize(tableName, instanceName, credentials);
         }
 
         /// <summary>
@@ -64,12 +42,18 @@ namespace ServiceNow.TableAPI
         /// <param name="password">Password for the user who will be used to access the table through the REST API.</param>
         public TableAPIClient(String tableName, String instanceName, String userName, string password)
         {
+            NetworkCredential credentials = new NetworkCredential { UserName = userName, Password = password };
+            initialize(tableName, instanceName, credentials);
+        }
+
+        private void initialize(String tableName, String instanceName, NetworkCredential credentials)
+        {
             _TableName = tableName;
             _InstanceName = instanceName;
 
             // Initialize the Web Client
             ServiceNowClient = new WebClient();
-            ServiceNowClient.Credentials = new NetworkCredential { UserName = userName, Password = password };
+            ServiceNowClient.Credentials = credentials;
 
             // Build the field list from the record type that will be retrieved
             _FieldList = "";

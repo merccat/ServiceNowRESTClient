@@ -50,6 +50,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Interface\ITableAPIClient.cs" />
+    <Compile Include="Interface\RestResponse.cs" />
     <Compile Include="ResourceLink.cs" />
     <Compile Include="Record.cs" />
     <Compile Include="RESTResponse.cs" />

@@ -1,5 +1,6 @@
 ﻿using System;
 using ServiceNow;
+using ServiceNow.Interface;
 using ServiceNow.TableAPI;
 using ServiceNow.TableDefinitions;
 
@@ -20,6 +21,7 @@ namespace UsageDemo
             retrieveByQuery();
 
             // Break
+            Console.WriteLine("\n\rCompleted.");
             Console.ReadLine();
         }
 
@@ -36,27 +38,27 @@ namespace UsageDemo
                 email = "tester@testcompany.com",
                 phone = ""
             });
-            Console.WriteLine("User Created: " + createdUser.result.first_name + " " + createdUser.result.last_name + " (" + createdUser.result.sys_id + ")");
+            Console.WriteLine("User Created: " + createdUser.Result.first_name + " " + createdUser.Result.last_name + " (" + createdUser.Result.sys_id + ")");
 
 
             // Retrieve the user (even though we already have it
-            var retrievedUser = client.GetById(createdUser.result.sys_id);
-            Console.WriteLine("User Retrieved: " + retrievedUser.result.first_name + " " + retrievedUser.result.last_name + " (" + retrievedUser.result.sys_id + ")");
+            var retrievedUser = client.GetById(createdUser.Result.sys_id);
+            Console.WriteLine("User Retrieved: " + retrievedUser.Result.first_name + " " + retrievedUser.Result.last_name + " (" + retrievedUser.Result.sys_id + ")");
 
 
             // Update the User
-            if (retrievedUser.result != null)
+            if (retrievedUser.Result != null)
             {
-                var d = retrievedUser.result;
+                var d = retrievedUser.Result;
                 d.email = "newEmail@testcompany.com";
 
                 var updatedUser = client.Put(d);
-                Console.WriteLine("Updated email: " + updatedUser.result.email);
+                Console.WriteLine("Updated email: " + updatedUser.Result.email);
             }
             
 
             // Delete the user
-            client.Delete(retrievedUser.result.sys_id);
+            client.Delete(retrievedUser.Result.sys_id);
         }
 
         static void retrieveByQuery()
@@ -64,7 +66,11 @@ namespace UsageDemo
             var query = "active=true^u_resolved=false";
             TableAPIClient<incident> client = new TableAPIClient<incident>("incident", myInstance, instanceUserName, instancePassword);
 
-            foreach (incident r in client.GetByQuery(query).result)
+            IRestQueryResponse<incident> response = client.GetByQuery(query);
+
+            Console.WriteLine(response.ResultCount + " records found. \n\nPress return to list results.");
+            Console.ReadLine();
+            foreach (incident r in response.Result)
             {
                 DateTime openedOn = DateTime.Parse(r.opened_at);
                 ResourceLink openedFor = r.caller_id;

@@ -1,15 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using ServiceNow.Interface;
 
 namespace ServiceNow
 {
     public abstract class RESTResponse
     {
-        public String RawJSON { get; set; }
-        public String ErrorMsg { get; set; }
+        public string RawJSON { get; set; }
+        public string ErrorMsg { get; set; }
 
         public RESTResponse()
         {
@@ -27,22 +24,38 @@ namespace ServiceNow
         }
     }
 
-    public class RESTQueryResponse<T> : RESTResponse
-    {
+    public class RESTQueryResponse<T> : RESTResponse, IRestQueryResponse<T>
+    {        
         public RESTQueryResponse()
         {
-            this.result = new List<T>();
+            this.Result = new List<T>();
         }
 
-        public List<T> result { get; set; }
+        public ICollection<T> Result { get; set; }
 
+        public int ResultCount
+        {
+            get
+            {
+                if (Result == null) { return 0; }
+                return Result.Count;
+            }
+        }
     }
 
-    public class RESTSingleResponse<T> : RESTResponse
+    public class RESTSingleResponse<T> : RESTResponse, IRestSingleResponse<T>
     {
         public RESTSingleResponse() { }
 
-        public T result { get; set; }
+        public T Result { get; set; }
 
+        public int ResultCount
+        {
+            get
+            {
+                if (Result == null) { return 0; }
+                return 1;
+            }
+        }
     }
 }

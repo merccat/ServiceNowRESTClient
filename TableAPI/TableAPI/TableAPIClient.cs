@@ -124,7 +124,7 @@ namespace ServiceNow.TableAPI
             }
 
             RESTSingleResponse<T> tmp = JsonConvert.DeserializeObject<RESTSingleResponse<T>>(response.RawJSON);
-            if (tmp != null) { response.result = tmp.result; }
+            if (tmp != null) { response.Result = tmp.Result; }
 
             return response;
         }
@@ -152,7 +152,7 @@ namespace ServiceNow.TableAPI
             }
 
             RESTQueryResponse<T> tmp = JsonConvert.DeserializeObject<RESTQueryResponse<T>>(response.RawJSON);
-            if (tmp != null) { response.result = tmp.result; }
+            if (tmp != null) { response.Result = tmp.Result; }
 
             return response;
         }
@@ -183,7 +183,7 @@ namespace ServiceNow.TableAPI
             }
 
             RESTSingleResponse<T> tmp = JsonConvert.DeserializeObject<RESTSingleResponse<T>>(response.RawJSON);
-            if (tmp != null) { response.result = tmp.result; }
+            if (tmp != null) { response.Result = tmp.Result; }
 
             return response;
         }
@@ -212,7 +212,7 @@ namespace ServiceNow.TableAPI
             }
 
             RESTSingleResponse<T> tmp = JsonConvert.DeserializeObject<RESTSingleResponse<T>>(response.RawJSON);
-            if (tmp != null) { response.result = tmp.result; }
+            if (tmp != null) { response.Result = tmp.Result; }
 
             return response;
         }

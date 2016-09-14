@@ -113,7 +113,6 @@ namespace ServiceNow.TableAPI
             try
             {
                 response.RawJSON = ServiceNowClient.DownloadString(URL + "/" + id + "?&sysparm_fields=" + _FieldList);
-                //response.RawJSON = serviceNowClient.DownloadString(URL + "?&sysparm_fields=" + _FieldList + "&sysparm_query=sys_id=" + id);
             }
             catch (WebException ex)
             {

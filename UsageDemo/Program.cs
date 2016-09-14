@@ -30,12 +30,11 @@ namespace UsageDemo
             // Create a user
             var createdUser = client.Post(new sys_user()
             {
+                employee_number = "012345",
                 first_name = "Tester",
                 last_name = "McTester",
-                u_employee_number = "999888",
-                u_unavailable = false,
-                u_location = "",
-                u_date_available = ""
+                email = "tester@testcompany.com",
+                phone = ""
             });
             Console.WriteLine("User Created: " + createdUser.result.first_name + " " + createdUser.result.last_name + " (" + createdUser.result.sys_id + ")");
 
@@ -49,12 +48,10 @@ namespace UsageDemo
             if (retrievedUser.result != null)
             {
                 var d = retrievedUser.result;
-                d.u_unavailable = true;
-                d.u_location = "somewhere else";
-                d.u_date_available = DateTime.Now.AddHours(3).ToString();
+                d.email = "newEmail@testcompany.com";
 
                 var updatedUser = client.Put(d);
-                Console.WriteLine("Updated Location: " + updatedUser.result.u_location);
+                Console.WriteLine("Updated email: " + updatedUser.result.email);
             }
             
 

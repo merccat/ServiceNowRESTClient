@@ -18,7 +18,7 @@ namespace UnitTests
             var retreivedUser = client.GetById("g46h5f15n11239862332v43238f382104");
 
             if (retreivedUser.IsError) { Assert.Fail(retreivedUser.ErrorMsg); }
-            Assert.AreEqual("012345", retreivedUser.result.u_employee_number);
+            Assert.AreEqual("012345", retreivedUser.result.employee_number);
         }
 
         [TestMethod]
@@ -33,7 +33,7 @@ namespace UnitTests
             if (retreivedUsers.IsError) { Assert.Fail(retreivedUsers.ErrorMsg); }
             if (retreivedUsers.result.Count == 0) { Assert.Fail("Expected users to be returned but none were."); }
             var testUser = retreivedUsers.result.Where(x => x.last_name == "McArthur" & x.first_name == "Ryan").FirstOrDefault();
-            Assert.AreEqual("012345", testUser.u_employee_number);
+            Assert.AreEqual("012345", testUser.employee_number);
         }
     }
 }

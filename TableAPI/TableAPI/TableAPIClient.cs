@@ -42,6 +42,7 @@ namespace ServiceNow.TableAPI
             Type i = typeof(T);
             foreach (var prop in i.GetProperties())
             {
+                // We need to build the field list using the JsonProperty attributes since those strings can contain our dot notation.
                 var field = prop.CustomAttributes.FirstOrDefault(x => x.AttributeType.Name == "JsonPropertyAttribute");
                 if (field != null)
                 {
@@ -50,9 +51,7 @@ namespace ServiceNow.TableAPI
                         if (_FieldList.Length > 0) { _FieldList += ","; }
                         _FieldList += fieldName.Value; 
                     }
-                }
-                //if (_FieldList.Length > 0) { _FieldList += ","; }
-                //_FieldList += prop.Name;               
+                }           
             }
         }
 
@@ -77,6 +76,7 @@ namespace ServiceNow.TableAPI
             Type i = typeof(T);
             foreach (var prop in i.GetProperties())
             {
+                // We need to build the field list using the JsonProperty attributes since those strings can contain our dot notation.
                 var field = prop.CustomAttributes.FirstOrDefault(x => x.AttributeType.Name == "JsonPropertyAttribute");
                 if (field != null)
                 {
@@ -87,8 +87,6 @@ namespace ServiceNow.TableAPI
                         _FieldList += fieldName.Value;
                     }
                 }
-                //if (_FieldList.Length > 0) { _FieldList += ","; }
-                //_FieldList += prop.Name;
             }
         }
 

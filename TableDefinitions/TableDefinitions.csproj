@@ -52,7 +52,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TableDefinitions\incident.cs" />
     <Compile Include="TableDefinitions\sys_user.cs" />
-    <Compile Include="TableDefinitions\task_time_worked.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

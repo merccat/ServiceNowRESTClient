@@ -1,9 +1,8 @@
 ﻿using Newtonsoft.Json;
-using ServiceNow;
 
 namespace ServiceNow.TableDefinitions
 {
-    public class sys_user : Record
+    public class sys_user : ServiceNow.Record
     {
         [JsonProperty("employee_number")]
         public string employee_number { get; set; }
@@ -19,5 +18,14 @@ namespace ServiceNow.TableDefinitions
 
         [JsonProperty("phone")]
         public string phone { get; set; }
+
+        [JsonProperty("u_notes")]
+        public string u_notes { get; set; } 
+
+        [JsonProperty("location.name")]
+        public string Location_name { get; set; }
+
+        [JsonProperty("location")]
+        public ResourceLink location { get; set; }
     }
 }

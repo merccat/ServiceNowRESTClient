@@ -4,7 +4,9 @@ using System.Net;
 using System.IO;
 using System.Linq;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 using System.Reflection;
+using System.Configuration;
 
 using ServiceNow;
 
@@ -44,6 +46,23 @@ namespace ServiceNow.TableAPI
         {
             NetworkCredential credentials = new NetworkCredential { UserName = userName, Password = password };
             initialize(tableName, instanceName, credentials);
+        }
+
+        /// <summary>
+        /// Constructor for the TableAPI Client.  Requires ServiceNow User, password and instance name to be set in your .config file.
+        /// </summary>
+        /// <param name="tableName">Name of the table to be accessed.  Must match ServiceNow's table name.</param>
+        public TableAPIClient(String tableName)
+        {
+            NetworkCredential credentials = new NetworkCredential
+            {
+                UserName = ConfigurationManager.AppSettings["ServiceNowUser"],
+                Password = ConfigurationManager.AppSettings["ServiceNowPass"]
+            };
+            initialize(
+                tableName,
+                ConfigurationManager.AppSettings["ServiceNowInstance"],
+                credentials);
         }
 
         private void initialize(String tableName, String instanceName, NetworkCredential credentials)
@@ -170,7 +189,7 @@ namespace ServiceNow.TableAPI
 
             try
             {
-                string data = JsonConvert.SerializeObject(record);
+                string data = JsonConvert.SerializeObject(record, new ResourceLinkConverter());
                 response.RawJSON = ServiceNowClient.UploadString(URL + "/" + record.sys_id + "?&sysparm_fields=" + _FieldList, "PUT", data);
             }
             catch (WebException ex)
@@ -198,8 +217,8 @@ namespace ServiceNow.TableAPI
             var response = new RESTSingleResponse<T>();
 
             try
-            {
-                string data = JsonConvert.SerializeObject(record);
+            {                
+                string data = JsonConvert.SerializeObject(record, new ResourceLinkConverter());
                 response.RawJSON = ServiceNowClient.UploadString(URL + "?&sysparm_fields=" + _FieldList, "POST", data);
             }
             catch (WebException ex)

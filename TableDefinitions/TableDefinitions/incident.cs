@@ -1,5 +1,4 @@
 ﻿using Newtonsoft.Json;
-using ServiceNow;
 
 namespace ServiceNow.TableDefinitions
 {
@@ -12,6 +11,14 @@ namespace ServiceNow.TableDefinitions
         [JsonProperty("caller_id.last_name")]
         public string caller_last_name { get; set; }
 
+        [JsonProperty("caller_id.location.name")]
+        public string caller_location_name { get; set; }
+
+        [JsonProperty("caller_id.location.latitude")]
+        public string caller_location_latitude { get; set; }
+
+        [JsonProperty("caller_id.location.longitude")]
+        public string Location_name_longitude { get; set; }
 
         // Example of including a related resource (returned as a JSON Link)
         [JsonProperty("caller_id")]
@@ -33,15 +40,12 @@ namespace ServiceNow.TableDefinitions
         [JsonProperty("opened_at")]
         public string opened_at { get; set; }
 
-
         // Example of other data types
         [JsonProperty("active")]
         public bool active { get; set; }
 
         [JsonProperty("impact")]
         public int impact { get; set; }
-
-        // "caller_first_name,caller_last_name,opened_by,number,short_description,description,opened_at,active,impact,sys_id"
-
+        
     }
 }

@@ -9,6 +9,9 @@ namespace ServiceNow
         public string link { get; set; }    // REST URL for child record
 
         [JsonProperty("value")]
-        public string value { get; set; }   // Sys_ID of child record
+        public string value { get; set; }   // Reference to the child record (sys_id)
+
+        // The ToString Method is called on serialization back to servicenow through the ResourceLinkConverter
+        public override string ToString() { return value; }
     }
 }
